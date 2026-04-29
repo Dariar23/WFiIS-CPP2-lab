@@ -1,3 +1,0 @@
-/Users/dararomanovskaa/uni_sem4/project2_cpp/build/CMakeFiles/ExpressionParser.dir
-/Users/dararomanovskaa/uni_sem4/project2_cpp/build/CMakeFiles/edit_cache.dir
-/Users/dararomanovskaa/uni_sem4/project2_cpp/build/CMakeFiles/rebuild_cache.dir
