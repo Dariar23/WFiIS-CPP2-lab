@@ -17,12 +17,12 @@ class Base{
 std::ostream& operator<<(std::ostream& os, const Base &b) {
         return b.print(os);
     }
-    std::ostream& operator<<(std::ostream&os, const std::vector<Base*>& base){
-        for(auto b: base){
-            b->print(os);
-        }
-        return os;
+std::ostream& operator<<(std::ostream&os, const std::vector<Base*>& base){
+    for(auto b: base){
+        b->print(os);
     }
+    return os;
+}
 class Derived1: public Base{
     public:
     std::ostream& print(std::ostream& os) const override{
