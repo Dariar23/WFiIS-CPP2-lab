@@ -2,11 +2,14 @@
 #include "IDocumentRenderer.h"
 #include <string>
 #include <algorithm>
+#include <cctype>
 
 class BaseDocumentRenderer : public IDocumentRenderer {
 protected:
     static std::string normalize(std::string content) {
-        std::transform(content.begin(), content.end(), content.begin(), [](unsigned char c){ return std::tolower(c); });
+        for (char& c : content) {
+            c = std::tolower(static_cast<unsigned char>(c));
+        }
         return content;
     }
 };
