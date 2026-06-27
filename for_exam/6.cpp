@@ -1,126 +1,38 @@
-#pragma once
-#include "IDocumentRenderer.h"
-#include <string>
-#include <algorithm>
-#include <cctype>
-
-class BaseDocumentRenderer : public IDocumentRenderer {
-protected:
-    static std::string normalize(std::string content) {
-        for (char& c : content) {
-            c = std::tolower(static_cast<unsigned char>(c));
-        }
-        return content;
-    }
-};
-
-#pragma once
-#include "PlainTextRenderer.h"
-#include "HtmlRenderer.h"
-#include "HeaderDecorator.h"
-#include "LoggingDecorator.h"
-
-
-#pragma once
-#include "RendererDecorator.h"
-#include <string>
-
-class HeaderDecorator : public RendererDecorator {
-    std::string header;
-
-public:
-    HeaderDecorator(std::string header, IDocumentRenderer const& renderer): RendererDecorator(renderer), header(std::move(header)) {}
-
-    std::string render(std::string const& content) const override;
-};
-
-#pragma once
-#include "BaseDocumentRenderer.h"
-
-class HtmlRenderer : public BaseDocumentRenderer {
-public:
-    std::string render(std::string const& content) const override;
-};
-
-#pragma once
-#include <string>
-
-class IDocumentRenderer {
-public:
-    virtual ~IDocumentRenderer() = default;
-    virtual std::string render(std::string const& content) const = 0;
-};
-
-#pragma once
-#include "RendererDecorator.h"
 #include <iostream>
-
-class LoggingDecorator : public RendererDecorator {
+class Math {
 public:
-    explicit LoggingDecorator(IDocumentRenderer const& renderer): RendererDecorator(renderer) {}
-
-    std::string render(std::string const& content) const override;
+    double calculate(double a, int b) { return a * b; }
 };
-
-#pragma once
-#include "BaseDocumentRenderer.h"
-
-class PlainTextRenderer : public BaseDocumentRenderer {
+class Calculator {
 public:
-    std::string render(std::string const& content) const override;
-};
-
-#pragma once
-#include "IDocumentRenderer.h"
-
-class RendererDecorator : public IDocumentRenderer {
-protected:
-    IDocumentRenderer const& inner;
-
-public:
-    explicit RendererDecorator(IDocumentRenderer const& renderer)
-        : inner(renderer) {}
-
-    virtual ~RendererDecorator() = default;
+    int add(int a, int b) { return a + b; }
+    int multiply(int a, int b) { return a * b; }
 };
 
 
-#include "PlainTextRenderer.h"
-#include "HtmlRenderer.h"
-#include "HeaderDecorator.h"
-#include "LoggingDecorator.h"
+int main() {
+    Math obj;
+    
+    // 1. Deklaracja wskaźnika methodPtr:
+   double (Math::*methodPtr)(double, int);
+    
+    // 2. Inicjalizacja (przypisanie adresu funkcji):
+    methodPtr=&Math::calculate;
+    
+    // 3. Wywołanie przez wskaźnik z argumentami 3.14 i 2:
+    double res=(obj.*methodPtr)(3.14,2);
 
-// PlainTextRenderer
-std::string PlainTextRenderer::render(std::string const& content) const {
-    return normalize(content);
-}
+    Calculator calc;
+    
+    // Zadeklaruj wskaźnik o nazwie 'op' do funkcji składowej klasy Calculator,
+    int (Calculator::*op)(int, int);
+    // która zwraca int i przyjmuje dwa parametry int.
+    // Następnie przypisz do niego funkcję multiply i wywołaj z argumentami 5 i 3.
+    op = &Calculator::multiply;
+    int (Calculator::*fun)(int, int) = &Calculator::add;
+    int res2=(calc.*fun)(2,3);
+    int res=(calc.*op)(5,3);
 
-// HtmlRenderer
-std::string HtmlRenderer::render(std::string const& content) const {
-    std::string normalized = normalize(content);
-
-    return "<html>\n<body>\n" +
-           normalized +
-           "\n</body>\n</html>";
-}
-
-
-// HeaderDecorator
-std::string HeaderDecorator::render(std::string const& content) const {
-    // Header NIE jest normalizowany
-    return header + "\n" + inner.render(content);
-}
-
-
-// LoggingDecorator
-std::string LoggingDecorator::render(std::string const& content) const {
-    std::cout << "[LOG] Rendering document with content:\n"
-              << content << "\n";
-
-    std::string result = inner.render(content);
-
-    std::cout << "[LOG] Result is: \n"
-              << result << "\n";
-
-    return result;
+  
+    
 }

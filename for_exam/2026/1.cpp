@@ -1,0 +1,45 @@
+#include <iostream>
+const int N = 3;
+
+template <typename T>
+struct array {
+    using value_type = T;
+    static const int size = N;
+    
+    T data[N];
+
+    T& operator[](int idx) { 
+        return data[idx]; 
+    }
+    
+    // Dostęp dla obiektów const
+    const T& operator[](int idx) const { 
+        return data[idx]; 
+    }
+};
+
+void print_to_cout( /* UZUPEŁNIJ 2 */ const array<int>& a_v )
+{
+    for (auto idx = 0; idx < N; ++idx)
+    {
+        std::cout << "[" << idx << "]: " << a_v[idx] << ", ";
+    }
+    std::cout << std::endl;
+}
+
+int main()
+{
+    array<int> a {5, 6, 7};
+    const array<int> b = a;
+
+    a[array<int>::size - 1] = array<int>::value_type{2};
+    a[0] = 3;
+
+    std::cout << "a: "; print_to_cout(a);
+    std::cout << "b: "; print_to_cout(b);
+}
+
+/* Oczekiwany output:
+a: [0] 3, [1] 6, [2] 2
+b: [0] 5, [1] 6, [2] 7
+*/
